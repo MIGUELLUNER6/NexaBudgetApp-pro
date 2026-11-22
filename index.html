@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>NexaBudget — Personal Finance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="NexaBudget home">
+        <span class="brand-mark">
+          <svg viewBox="0 0 48 48" role="img" aria-label="NexaBudget logo">
+            <path d="M8 31.5 18.5 21l7 7L40 13.5" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M29 13.5H40V24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 39h32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+          </svg>
+        </span>
+        <span><strong>Nexa</strong><small>BUDGET</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-page="overview"><span>▦</span> Overview</button>
+        <button class="nav-item" data-page="transactions"><span>⇄</span> Transactions</button>
+        <button class="nav-item" data-page="budgets"><span>◷</span> Budgets</button>
+        <button class="nav-item" data-page="goals"><span>◎</span> Savings goals</button>
+        <button class="nav-item" data-page="reports"><span>▥</span> Reports</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="side-tip"><span class="tip-icon">✦</span><b>Small steps add up.</b><p>Build better money habits, one day at a time.</p></div>
+        <button class="nav-item" id="settingsBtn"><span>⚙</span> Settings</button>
+        <div class="profile"><div class="avatar">NB</div><div><b>My finances</b><small>Personal workspace</small></div><span class="more">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuBtn" aria-label="Open menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <b id="pageCrumb">Overview</b></div>
+        <div class="top-actions">
+          <span class="today" id="todayLabel"></span>
+          <button class="icon-btn" id="exportBtn" title="Export transactions">⇩</button>
+          <button class="primary-btn" id="addTopBtn">＋ Add transaction</button>
+        </div>
+      </header>
+
+      <section class="page active-page" id="overviewPage">
+        <div class="page-heading">
+          <div><p class="eyebrow">YOUR FINANCIAL SNAPSHOT</p><h1>Good money habits start here.</h1><p class="muted">Here’s how your finances are looking.</p></div>
+          <div class="month-select"><span>PERIOD</span><input type="month" id="monthFilter"></div>
+        </div>
+        <div class="stat-grid">
+          <article class="stat-card balance-card"><div class="stat-top"><span>Total balance</span><span class="stat-icon">◈</span></div><div class="stat-value" id="totalBalance">KSh 0.00</div><div class="stat-foot"><span class="positive">●</span> Income minus expenses</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Income</span><span class="stat-icon green">↗</span></div><div class="stat-value" id="totalIncome">KSh 0.00</div><div class="stat-foot">This month</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Expenses</span><span class="stat-icon coral">↘</span></div><div class="stat-value" id="totalExpense">KSh 0.00</div><div class="stat-foot">This month</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Savings rate</span><span class="stat-icon purple">％</span></div><div class="stat-value" id="savingsRate">0%</div><div class="stat-foot">Of this month’s income</div></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel cashflow-panel">
+            <div class="panel-heading"><div><h2>Cash flow</h2><p class="muted">Income vs. expenses over the selected period</p></div><span class="pill">Monthly</span></div>
+            <div class="chart-legend"><span><i class="dot income-dot"></i> Income</span><span><i class="dot expense-dot"></i> Expenses</span></div>
+            <div class="bar-chart" id="cashflowChart"><div class="empty-state">Add transactions to see your cash flow.</div></div>
+          </article>
+          <article class="panel spending-panel">
+            <div class="panel-heading"><div><h2>Spending breakdown</h2><p class="muted">Where your money goes</p></div><button class="text-btn" data-go="reports">View report →</button></div>
+            <div class="donut-wrap"><div class="donut" id="spendingDonut"><div><strong id="donutTotal">KSh 0</strong><small>Total spent</small></div></div></div>
+            <div class="category-legend" id="categoryLegend"><div class="empty-state">Your categories will appear here.</div></div>
+          </article>
+        </div>
+        <article class="panel recent-panel">
+          <div class="panel-heading"><div><h2>Recent transactions</h2><p class="muted">Your latest money movements</p></div><button class="text-btn" data-go="transactions">See all →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>DESCRIPTION</th><th>CATEGORY</th><th>DATE</th><th>TYPE</th><th class="align-right">AMOUNT</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="page" id="transactionsPage">
+        <div class="page-heading"><div><p class="eyebrow">MONEY MOVEMENT</p><h1>Transactions</h1><p class="muted">Track every shilling coming in and going out.</p></div><button class="primary-btn" id="addTransactionBtn">＋ Add transaction</button></div>
+        <div class="panel filters"><input id="searchTransactions" placeholder="Search description or category…"><select id="typeFilter"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option></select><select id="categoryFilter"><option value="all">All categories</option></select></div>
+        <article class="panel"><div class="table-wrap"><table><thead><tr><th>DESCRIPTION</th><th>CATEGORY</th><th>DATE</th><th>TYPE</th><th class="align-right">AMOUNT</th><th></th></tr></thead><tbody id="transactionRows"></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="budgetsPage">
+        <div class="page-heading"><div><p class="eyebrow">SPENDING LIMITS</p><h1>Your budgets</h1><p class="muted">Give every category a plan and stay in control.</p></div><button class="primary-btn" id="addBudgetBtn">＋ Set a budget</button></div>
+        <div class="budget-summary" id="budgetSummary"></div>
+        <div class="budget-grid" id="budgetGrid"></div>
+      </section>
+
+      <section class="page" id="goalsPage">
+        <div class="page-heading"><div><p class="eyebrow">FUTURE YOU WILL THANK YOU</p><h1>Savings goals</h1><p class="muted">Turn your plans into progress, one deposit at a time.</p></div><button class="primary-btn" id="addGoalBtn">＋ Create a goal</button></div>
+        <div class="goal-grid" id="goalGrid"></div>
+      </section>
+
+      <section class="page" id="reportsPage">
+        <div class="page-heading"><div><p class="eyebrow">INSIGHTS & TRENDS</p><h1>Financial reports</h1><p class="muted">Understand your patterns and make informed decisions.</p></div><button class="outline-btn" id="reportExportBtn">⇩ Export CSV</button></div>
+        <div class="stat-grid report-stats"><article class="stat-card"><span class="muted">Total income</span><div class="stat-value" id="reportIncome">KSh 0</div></article><article class="stat-card"><span class="muted">Total expenses</span><div class="stat-value" id="reportExpense">KSh 0</div></article><article class="stat-card"><span class="muted">Net cash flow</span><div class="stat-value" id="reportNet">KSh 0</div></article><article class="stat-card"><span class="muted">Transactions</span><div class="stat-value" id="reportCount">0</div></article></div>
+        <div class="content-grid"><article class="panel"><div class="panel-heading"><div><h2>Monthly comparison</h2><p class="muted">Income and expenses by month</p></div></div><div class="bar-chart report-chart" id="reportChart"></div></article><article class="panel"><div class="panel-heading"><div><h2>Top spending categories</h2><p class="muted">Based on recorded expenses</p></div></div><div id="reportCategories" class="category-legend"></div></article></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><div><p class="eyebrow">NEXABUDGET</p><h2 id="modalTitle">Add transaction</h2></div><button class="close-btn" id="closeModal" aria-label="Close">×</button></div>
+      <form id="transactionForm">
+        <div class="type-toggle"><button type="button" class="selected" data-type="expense">Expense</button><button type="button" data-type="income">Income</button></div>
+        <input type="hidden" id="transactionType" value="expense">
+        <label>Description<input id="description" required maxlength="70" placeholder="e.g. Weekly groceries"></label>
+        <div class="form-row"><label>Amount (KSh)<input id="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label><label>Category<select id="category" required></select></label></div>
+        <div class="form-row"><label>Date<input id="date" type="date" required></label><label>Payment method<select id="payment"><option>Cash</option><option>M-Pesa</option><option>Bank</option><option>Card</option><option>Other</option></select></label></div>
+        <label class="check-label"><input type="checkbox" id="recurring"> Mark as recurring</label>
+        <div class="modal-actions"><button type="button" class="outline-btn" id="cancelModal">Cancel</button><button type="submit" class="primary-btn">Save transaction</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="simpleBackdrop">
+    <section class="modal small-modal" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">NEXABUDGET</p><h2 id="simpleTitle">Create</h2></div><button class="close-btn" id="closeSimple">×</button></div><form id="simpleForm"><div id="simpleFields"></div><div class="modal-actions"><button type="button" class="outline-btn" id="cancelSimple">Cancel</button><button class="primary-btn" type="submit">Save</button></div></form></section>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
